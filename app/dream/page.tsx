@@ -15,7 +15,7 @@ import Toggle from "../../components/Toggle";
 import appendNewToName from "../../utils/appendNewToName";
 import downloadPhoto from "../../utils/downloadPhoto";
 import DropDown from "../../components/DropDown";
-import { roomType, rooms, themeType, themes } from "../../utils/dropdownTypes";
+import {roomType, rooms, themeType, themes, themeMap, roomMap} from "../../utils/dropdownTypes";
 
 const options: UploadWidgetConfig = {
   apiKey: !!process.env.NEXT_PUBLIC_UPLOAD_API_KEY
@@ -49,8 +49,8 @@ export default function DreamPage() {
   const [sideBySide, setSideBySide] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [photoName, setPhotoName] = useState<string | null>(null);
-  const [theme, setTheme] = useState<themeType>("Modern");
-  const [room, setRoom] = useState<roomType>("Living Room");
+  const [theme, setTheme] = useState<themeType>("现代");
+  const [room, setRoom] = useState<roomType>("客厅");
 
   const UploadDropZone = () => (
     <UploadDropzone
@@ -85,7 +85,7 @@ export default function DreamPage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ imageUrl: fileUrl, theme, room }),
+      body: JSON.stringify({ imageUrl: fileUrl, theme: themeMap[theme], room: roomMap[room] }),
     });
 
     let newPhoto = await res.json();
@@ -104,7 +104,7 @@ export default function DreamPage() {
       <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">
         <h1 className="mx-auto max-w-4xl font-display text-4xl font-bold tracking-normal text-slate-100 sm:text-6xl mb-5">
-          Generate your <span className="text-blue-600">dream</span> room
+          打造你的 <span className="text-blue-600">理想</span> 房间
         </h1>
         <ResizablePanel>
           <AnimatePresence mode="wait">
@@ -120,7 +120,7 @@ export default function DreamPage() {
                         alt="1 icon"
                       />
                       <p className="text-left font-medium">
-                        Choose your room theme.
+                        选择房间风格.
                       </p>
                     </div>
                     <DropDown
@@ -140,7 +140,7 @@ export default function DreamPage() {
                         alt="1 icon"
                       />
                       <p className="text-left font-medium">
-                        Choose your room type.
+                        选择房间类型.
                       </p>
                     </div>
                     <DropDown
@@ -158,7 +158,7 @@ export default function DreamPage() {
                         alt="1 icon"
                       />
                       <p className="text-left font-medium">
-                        Upload a picture of your room.
+                        上传房间照片
                       </p>
                     </div>
                   </div>
